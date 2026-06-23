@@ -51,5 +51,114 @@
                         </form>
                     </main>
                 </div>
+            </div><%- include('./partials/header') %>
+
+<% if (locals.success && success.length > 0) { %>
+<div class="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-md bg-green-500 text-white shadow-lg">
+    <%= success %>
+</div>
+<% } %>
+<% if (locals.error && error.length > 0) { %>
+<div class="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-md bg-red-500 text-white shadow-lg">
+    <%= error %>
+</div>
+<% } %>
+
+<div class="w-full min-h-screen flex px-10 py-10">
+
+    <div class="w-[22%] flex flex-col pr-8 border-r border-zinc-100">
+        <h3 class="text-xs font-semibold uppercase tracking-widest text-zinc-400 mb-4">Admin Panel</h3>
+        <nav class="flex flex-col gap-2 text-sm">
+            <a href="/owners/admin" class="text-zinc-600 hover:text-blue-500 transition">All Products</a>
+            <a href="/products/create-page" class="text-blue-500 font-medium hover:underline">+ Create New Product</a>
+            <div class="mt-8 border-t border-zinc-100 pt-4">
+                <a href="/owners/logout" class="text-red-400 hover:text-red-600 transition text-sm">Logout</a>
             </div>
+        </nav>
+    </div>
+
+    <div class="w-[78%] pl-10">
+        <h2 class="text-2xl font-light text-zinc-700 mb-8">Create New Product</h2>
+
+        <form autocomplete="off" action="/products/create" method="post" enctype="multipart/form-data"
+            class="bg-white border border-zinc-100 rounded-2xl shadow-sm p-8 max-w-2xl">
+
+            <section class="mb-8">
+                <h3 class="text-base font-semibold text-zinc-700 mb-4">Product Details</h3>
+                <div class="flex flex-col gap-4">
+                    <div>
+                        <label class="block text-sm text-zinc-500 mb-1">Product Image <span class="text-red-400">*</span></label>
+                        <input name="image" type="file" accept="image/*" required
+                            class="w-full text-sm text-zinc-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100 transition">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm text-zinc-500 mb-1">Product Name <span class="text-red-400">*</span></label>
+                            <input name="name" type="text" placeholder="e.g. Clinge Bag" required
+                                class="border border-zinc-200 p-3 rounded-lg w-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-300">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-zinc-500 mb-1">Price (₹) <span class="text-red-400">*</span></label>
+                            <input name="price" type="number" placeholder="e.g. 1200" min="0" required
+                                class="border border-zinc-200 p-3 rounded-lg w-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-300">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-zinc-500 mb-1">Discount (₹)</label>
+                            <input name="discount" type="number" placeholder="e.g. 100" min="0" value="0"
+                                class="border border-zinc-200 p-3 rounded-lg w-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-300">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-8">
+                <h3 class="text-base font-semibold text-zinc-700 mb-4">Panel Colours</h3>
+                <div class="grid grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm text-zinc-500 mb-1">Background Colour</label>
+                        <div class="flex gap-2 items-center border border-zinc-200 rounded-lg px-3 py-2">
+                            <input name="bgcolor" type="color" value="#ffffff" class="w-8 h-8 rounded cursor-pointer border-0 bg-transparent">
+                            <input type="text" placeholder="#ffffff" id="bgcolorText"
+                                class="text-xs text-zinc-500 w-full focus:outline-none"
+                                oninput="document.querySelector('[name=bgcolor]').value=this.value">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-zinc-500 mb-1">Panel Colour</label>
+                        <div class="flex gap-2 items-center border border-zinc-200 rounded-lg px-3 py-2">
+                            <input name="panelcolor" type="color" value="#ffffff" class="w-8 h-8 rounded cursor-pointer border-0 bg-transparent">
+                            <input type="text" placeholder="#ffffff"
+                                class="text-xs text-zinc-500 w-full focus:outline-none"
+                                oninput="document.querySelector('[name=panelcolor]').value=this.value">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-zinc-500 mb-1">Text Colour</label>
+                        <div class="flex gap-2 items-center border border-zinc-200 rounded-lg px-3 py-2">
+                            <input name="textcolor" type="color" value="#000000" class="w-8 h-8 rounded cursor-pointer border-0 bg-transparent">
+                            <input type="text" placeholder="#000000"
+                                class="text-xs text-zinc-500 w-full focus:outline-none"
+                                oninput="document.querySelector('[name=textcolor]').value=this.value">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="flex gap-3">
+                <button type="submit"
+                    class="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-full text-sm font-medium transition">
+                    Create Product
+                </button>
+                <a href="/owners/admin"
+                    class="px-6 py-3 bg-zinc-100 hover:bg-zinc-200 text-zinc-700 rounded-full text-sm font-medium transition">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<%- include('./partials/footer') %>
+
             <%- include('./partials/footer') %>
