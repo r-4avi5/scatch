@@ -1,39 +1,65 @@
-const express = require('express');
+const express = require("express");
 const app = express();
 const cookieParser = require("cookie-parser");
 const path = require("path");
 const expressSession = require("express-session");
 const flash = require("connect-flash");
 
+require("dotenv").config();
+
+// Database connection
+const db = require("./config/mongoose-connection");
+
+// Routers
 const ownersRouter = require("./routes/ownersRouter");
 const productsRouter = require("./routes/productsRouter");
 const usersRouter = require("./routes/usersRouter");
 const indexRouter = require("./routes/index");
 
-require("dotenv").config();
-
-const db = require("./config/mongoose-connection");
-
+// --- Middleware ---
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname,"public")));
-app.set("view engine","ejs");
+app.use(express.static(path.join(__dirname, "public")));
+
+// View engine
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
+// Session — must come before flash
 app.use(
     expressSession({
-  secret: process.env.EXPRESS_SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-})
+        secret: process.env.EXPRESS_SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false,
+        cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 },
+    })
 );
-app.use(flash());
-app.use((req, res, next) => {
-    res.locals.error = req.flash("error");
-    next();
-});
-app.use("/",indexRouter);
-app.use("/owners",ownersRouter);
-app.use("/products",productsRouter);
-app.use("/users",usersRouter);
 
-app.listen(3000);
+// Flash middleware
+app.use(flash());
+
+// DO NOT consume flash here with res.locals — let each route read it once via req.flash()
+// Routes pass flash directly to res.render() to avoid double-consumption
+
+// --- Routes ---
+app.use("/", indexRouter);
+app.use("/owners", ownersRouter);
+app.use("/products", productsRouter);
+app.use("/users", usersRouter);
+
+// --- 404 handler ---
+app.use((req, res) => {
+    res.status(404).render("404");
+});
+
+// --- Global error handler ---
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send("Something went wrong. Please try again.");
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Scatch server running at http://localhost:${PORT}`);
+});

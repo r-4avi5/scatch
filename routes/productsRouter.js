@@ -1,25 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const upload = require("../config/multer-config");
-const productModel = require("../models/product-model");
+const { createProduct } = require("../controllers/productController");
+const isOwnerLoggedIn = require("../middlewares/isOwnerLoggedIn");
 
-
-router.post("/create",upload.single("image"),async function(req,res){
-    try {let{name,price,discount,bgcolor,panelcolor,textcolor} = req.body;
-       let products =  await productModel.create({
-        image:req.file.buffer,
-        name,
-        price,
-        discount,
-        bgcolor,
-        panelcolor,
-        textcolor,
-      });
-      // res.flash("success","product created successfully")
-      res.send("/owners/admin");}
-      catch(error){
-        res.send(error.message);
-      }
+// Show product creation form (owner only)
+router.get("/create-page", isOwnerLoggedIn, function (req, res) {
+    let success = req.flash("success");
+    let error   = req.flash("error");
+    res.render("createproducts", { success, error, loggedin: false });
 });
+
+// Handle product creation with image upload (owner only)
+router.post("/create", isOwnerLoggedIn, upload.single("image"), createProduct);
 
 module.exports = router;
