@@ -9,25 +9,3 @@
     <%= error %>
 </div>
 <% } %>
-
-<script>
-    (function () {
-        function hideFlash(id) {
-            var el = document.getElementById(id);
-            if (!el) return;
-
-            var opacity = 1;
-            var interval = setInterval(function () {
-                opacity -= 0.05;
-                el.style.opacity = opacity;
-                if (opacity <= 0) {
-                    clearInterval(interval);
-                    el.style.display = 'none';
-                }
-            }, 25);
-        }
-
-        setTimeout(function () { hideFlash('flash-success'); }, 3000);
-        setTimeout(function () { hideFlash('flash-error'); }, 3000);
-    })();
-</script> 
