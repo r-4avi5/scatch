@@ -1,11 +1,31 @@
-<% if (locals.success && success.length > 0) { %>
-<div id="flash-success" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-lg bg-green-500 text-white shadow-lg text-sm font-medium">
+<% if (typeof success !== 'undefined' && success && success.length > 0) { %>
+<div id="flash-success" style="position:fixed;top:72px;left:50%;transform:translateX(-50%);z-index:9999;padding:12px 24px;background:#22c55e;color:white;border-radius:8px;font-size:14px;font-weight:500;box-shadow:0 4px 12px rgba(0,0,0,0.15);">
     <%= success %>
 </div>
 <% } %>
 
-<% if (locals.error && error.length > 0) { %>
-<div id="flash-error" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-lg bg-red-500 text-white shadow-lg text-sm font-medium">
+<% if (typeof error !== 'undefined' && error && error.length > 0) { %>
+<div id="flash-error" style="position:fixed;top:72px;left:50%;transform:translateX(-50%);z-index:9999;padding:12px 24px;background:#ef4444;color:white;border-radius:8px;font-size:14px;font-weight:500;box-shadow:0 4px 12px rgba(0,0,0,0.15);">
     <%= error %>
 </div>
 <% } %>
+
+<script>
+    (function () {
+        function fadeOut(id) {
+            var el = document.getElementById(id);
+            if (!el) return;
+            var opacity = 1;
+            var timer = setInterval(function () {
+                opacity -= 0.05;
+                el.style.opacity = opacity;
+                if (opacity <= 0) {
+                    clearInterval(timer);
+                    el.parentNode && el.parentNode.removeChild(el);
+                }
+            }, 25);
+        }
+        setTimeout(function () { fadeOut('flash-success'); }, 3000);
+        setTimeout(function () { fadeOut('flash-error'); }, 3000);
+    })();
+</script>
