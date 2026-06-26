@@ -1,31 +1,24 @@
-<% if (typeof success !== 'undefined' && success && success.length > 0) { %>
-<div id="flash-success" style="position:fixed;top:72px;left:50%;transform:translateX(-50%);z-index:9999;padding:12px 24px;background:#22c55e;color:white;border-radius:8px;font-size:14px;font-weight:500;box-shadow:0 4px 12px rgba(0,0,0,0.15);">
-    <%= success %>
-</div>
-<% } %>
-
-<% if (typeof error !== 'undefined' && error && error.length > 0) { %>
-<div id="flash-error" style="position:fixed;top:72px;left:50%;transform:translateX(-50%);z-index:9999;padding:12px 24px;background:#ef4444;color:white;border-radius:8px;font-size:14px;font-weight:500;box-shadow:0 4px 12px rgba(0,0,0,0.15);">
-    <%= error %>
-</div>
+<% if (success && success.length > 0) { %>
+    <div id="flash-message" class="flash-container">
+        <%= success %>
+    </div>
 <% } %>
 
 <script>
-    (function () {
-        function fadeOut(id) {
-            var el = document.getElementById(id);
-            if (!el) return;
-            var opacity = 1;
-            var timer = setInterval(function () {
-                opacity -= 0.05;
-                el.style.opacity = opacity;
-                if (opacity <= 0) {
-                    clearInterval(timer);
-                    el.parentNode && el.parentNode.removeChild(el);
-                }
-            }, 25);
+    document.addEventListener("DOMContentLoaded", () => {
+        const flashMsg = document.getElementById("flash-message");
+        
+        if (flashMsg) {
+            // Wait 3 seconds, then start the fade out
+            setTimeout(() => {
+                flashMsg.style.transition = "opacity 0.5s ease";
+                flashMsg.style.opacity = "0";
+                
+                // Remove the element from the DOM entirely after the fade transition
+                setTimeout(() => {
+                    flashMsg.remove();
+                }, 500); 
+            }, 3000); 
         }
-        setTimeout(function () { fadeOut('flash-success'); }, 3000);
-        setTimeout(function () { fadeOut('flash-error'); }, 3000);
-    })();
+    });
 </script>
