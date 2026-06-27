@@ -1,4 +1,4 @@
-require("dotenv").config(); // must be first
+require("dotenv").config();
 
 const express = require("express");
 const app = express();
@@ -7,10 +7,8 @@ const path = require("path");
 const expressSession = require("express-session");
 const flash = require("./middlewares/flash");
 
-// Database connection
 const db = require("./config/mongoose-connection");
 
-// Routers
 const ownersRouter   = require("./routes/ownersRouter");
 const productsRouter = require("./routes/productsRouter");
 const usersRouter    = require("./routes/usersRouter");
