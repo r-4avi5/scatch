@@ -15,8 +15,11 @@ if (process.env.NODE_ENV === "development") {
             if (!fullname || !email || !password) return res.status(400).send("All fields are required");
             const salt = await bcrypt.genSalt(10);
             const hash = await bcrypt.hash(password, salt);
-            let createdOwner = await ownerModel.create({ fullname, email, password: hash });
-            res.status(201).json({ message: "Owner created successfully", owner: { id: createdOwner._id, fullname, email } });
+            let createdOwner = await ownerModel.create(
+                {   fullname, 
+                    email, 
+                    password: hash });
+            res.status(201);
         } catch (err) {
             res.status(500).send(err.message);
         }
@@ -24,7 +27,7 @@ if (process.env.NODE_ENV === "development") {
 }
 
 router.get("/login", function (req, res) {
-    res.render("owner-login", { loggedin: false, ...req.getFlash() });
+    res.render("owner-login", { loggedin: false});
 });
 
 router.post("/login", loginOwner);
