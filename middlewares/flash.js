@@ -1,4 +1,3 @@
-// Custom flash middleware — simple and reliable
 module.exports = function flashMiddleware(req, res, next) {
 
     // Attach req.flash() setter
