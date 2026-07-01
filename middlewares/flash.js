@@ -16,7 +16,7 @@ module.exports = function flashMiddleware(req, res, next) {
         return { success, error };
     };
 
-    // Override res.redirect to always save session first
+    // Override res.redirect to always save session first and further proceed
     const originalRedirect = res.redirect.bind(res);
     res.redirect = function (url) {
         req.session.save(function (err) {
